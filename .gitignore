@@ -13,6 +13,8 @@ next-env.d.ts
 *-debug.log*
 logs/
 *.log
+__pycache__/
+*.py[cod]
 .claude-replay.*
 .figma/runtime/
 .tmp-*
