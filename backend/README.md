@@ -51,6 +51,8 @@ Send `Authorization: Bearer <better-auth-jwt>` with every request. FastAPI
 fetches the issuer's JWKS and validates the RS256 signature, issuer, audience,
 and expiration. The five-minute app token is derived from a valid Better Auth
 session and is never stored in the browser.
+`BETTER_AUTH_URL` is the public token issuer; set `BETTER_AUTH_JWKS_URL` to a
+container-reachable URL when the backend cannot resolve that public origin.
 
 `GET /api/v1/users/me` auto-creates the backend profile on first use.
 `POST /api/v1/users/sync` refreshes it and rejects a body whose `auth_user_id`

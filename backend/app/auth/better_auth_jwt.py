@@ -24,11 +24,12 @@ async def _get_signing_key(kid: str) -> dict:
     origin = settings.better_auth_url.rstrip("/")
     if not origin:
         raise BetterAuthJWTError("Authentication issuer is not configured.")
+    jwks_url = settings.better_auth_jwks_url.rstrip("/") or f"{origin}/auth/api/jwks"
 
     if time.monotonic() >= _JWKS_EXPIRES_AT or kid not in _JWKS_CACHE:
         try:
             async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.get(f"{origin}/auth/api/jwks")
+                response = await client.get(jwks_url)
                 response.raise_for_status()
                 document = response.json()
                 keys = document.get("keys", []) if isinstance(document, dict) else []

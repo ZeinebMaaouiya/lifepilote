@@ -31,8 +31,10 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
 
     # ── Auth ─────────────────────────────────────────────────────────────────
-    # Public Better Auth origin used to verify issuer, audience, and JWKS.
+    # Public issuer used to verify the token; the JWKS endpoint can use an
+    # internal network address when the backend runs in a container.
     better_auth_url: str = ""
+    better_auth_jwks_url: str = ""
 
     # ── CORS ─────────────────────────────────────────────────────────────────
     cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:3000"]
