@@ -5,8 +5,13 @@ import { getAuth } from '@/lib/auth'
 
 export const appAuth = {
   async currentUser() {
-    const session = await getAuth().api.getSession({ headers: await headers() })
-    return session?.user ?? null
+    try {
+      const session = await getAuth().api.getSession({ headers: await headers() })
+      return session?.user ?? null
+    } catch (error) {
+      console.error('[auth] authentication is unavailable:', error)
+      return null
+    }
   },
 
   async login(email: string, password: string) {
