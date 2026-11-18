@@ -75,7 +75,8 @@ relationship audit, backup, and rollback plan.
 
 ## Email behavior
 
-Signup requires a verified email before login. Reset links expire according to
-Better Auth's configured defaults. The UI uses generic recovery responses to
-avoid account enumeration. Signup and reset delivery are unavailable until the
+Email verification is currently optional, so users can sign in after signup
+without receiving a verification email. Password reset links expire according
+to Better Auth's configured defaults. The UI uses generic recovery responses to
+avoid account enumeration. Password reset delivery is unavailable until the
 SMTP variables are configured in the deployment environment.

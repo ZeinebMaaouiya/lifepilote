@@ -5,7 +5,6 @@ import {
   loginAction,
   registerAction,
   requestPasswordResetAction,
-  resendVerificationAction,
   type AuthState,
 } from './actions'
 
@@ -20,10 +19,6 @@ export function AuthForm() {
   )
   const [resetState, resetFormAction, resetPending] = useActionState(
     requestPasswordResetAction,
-    initialState,
-  )
-  const [verificationState, verificationFormAction, verificationPending] = useActionState(
-    resendVerificationAction,
     initialState,
   )
   const state = mode === 'login' ? loginState : mode === 'register' ? registerState : resetState
@@ -131,26 +126,6 @@ export function AuthForm() {
         <button className="text-btn" type="button" onClick={() => setMode('login')}>
           Back to sign in
         </button>
-      )}
-      {mode === 'register' && registerState.showLogin && (
-        <>
-          <form action={verificationFormAction}>
-            <label>
-              Resend verification email
-              <input name="email" type="email" autoComplete="email" required />
-            </label>
-            {verificationState.error && <p className="auth-error">{verificationState.error}</p>}
-            {verificationState.success && (
-              <p className="auth-success">{verificationState.success}</p>
-            )}
-            <button className="text-btn" disabled={verificationPending} type="submit">
-              {verificationPending ? 'Please wait…' : 'Resend email'}
-            </button>
-          </form>
-          <button className="text-btn" type="button" onClick={() => setMode('login')}>
-            Go to sign in
-          </button>
-        </>
       )}
       <small>By continuing, you agree to keep your account credentials private.</small>
     </div>

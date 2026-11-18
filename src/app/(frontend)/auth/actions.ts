@@ -6,7 +6,7 @@ import { getAuth } from '@/lib/auth'
 import { appAuth } from '@/lib/app-auth'
 import { getPrisma } from '@/lib/prisma'
 
-export type AuthState = { error?: string; success?: string; showLogin?: boolean }
+export type AuthState = { error?: string; success?: string }
 
 const readText = (formData: FormData, key: string) => {
   const value = formData.get(key)
@@ -28,9 +28,7 @@ export async function loginAction(_: AuthState, formData: FormData): Promise<Aut
   try {
     await appAuth.login(email, password)
   } catch {
-    return {
-      error: 'Sign-in failed. Check your credentials and verify your email address.',
-    }
+    return { error: 'Sign-in failed. Check your email and password.' }
   }
   redirect('/')
 }
@@ -52,16 +50,10 @@ export async function registerAction(_: AuthState, formData: FormData): Promise<
       body: { name: firstName, email, password },
     })
   } catch {
-    return {
-      error: 'We could not complete signup. If a prior attempt may have succeeded, use the verification or password recovery options before trying again.',
-      showLogin: true,
-    }
+    return { error: 'We could not complete signup. Check your details and try again.' }
   }
 
-  return {
-    success: 'Check your email for a verification link before signing in.',
-    showLogin: true,
-  }
+  return { success: 'Your account is ready. You can now sign in.' }
 }
 
 export async function requestPasswordResetAction(
@@ -83,25 +75,6 @@ export async function requestPasswordResetAction(
   return {
     success: 'If an account uses that email, password reset instructions will be sent.',
   }
-}
-
-export async function resendVerificationAction(
-  _: AuthState,
-  formData: FormData,
-): Promise<AuthState> {
-  const email = readText(formData, 'email').toLowerCase()
-  if (!validEmail(email)) return { error: 'Enter a valid email address.' }
-
-  try {
-    await getAuth().api.sendVerificationEmail({
-      headers: await headers(),
-      body: { email, callbackURL: '/' },
-    })
-  } catch {
-    // Keep responses generic and do not reveal whether an account exists.
-  }
-
-  return { success: 'If the account needs verification, a new email will be sent.' }
 }
 
 export async function resetPasswordAction(
